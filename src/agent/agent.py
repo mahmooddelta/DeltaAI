@@ -28,27 +28,20 @@ class Agent:
         session_key = input("Enter Session : ")
         session = str(uuid.uuid4()) if session_key=="" else session_key
         while True:
-            user_input = input("Ask anything: (type 'q' to quit or 'ch' for change session): ")
-
+            user_input = input("Ask anything: (type 'q' to quit): ")
 
             if user_input == "q":
                 print("Goodbye")
                 break
 
-            # if user_input == "ch":
-            #     active_session = "session_2" if active_session == "session_1" else "session_1"
-            #     continue
-
-            # self.messages.append(HumanMessage(user_input))
             config = {'configurable': {'thread_id': session}}
             response = self.agent.invoke({
                 "messages": HumanMessage(user_input)
             }, config=config)
 
-            # self.messages.append(response['messages'][-1])
             print(response['messages'][-1].content)
 
-        messages_config = {'configurable': {'thread_id': active_session}}
+        messages_config = {'configurable': {'thread_id': session}}
         state = self.agent.get_state(messages_config)
         print(state.values['messages'])
 
