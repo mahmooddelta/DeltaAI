@@ -1,17 +1,11 @@
-import dotenv
-import os
-
-dotenv.load_dotenv()
 from src.agent.agent import Agent
+from src.infrastructure.configs import config
 from langgraph.checkpoint.postgres import PostgresSaver
-
-DATABASE_URL = os.environ.get("LANGGRAPH_DATABASE_URL")
-
 
 
 def main():
 
-    with PostgresSaver.from_conn_string(DATABASE_URL) as checkpointer:
+    with PostgresSaver.from_conn_string(config.LANGGRAPH_DATABASE_URL) as checkpointer:
         checkpointer.setup()
         agent = Agent(checkpointer)
         agent.chat_loop()

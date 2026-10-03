@@ -1,21 +1,11 @@
-import dotenv
-import os
-
-from langchain.agents import create_agent
-from sqlalchemy import create_engine
 from sqlalchemy import create_engine
 
 from src.domain.models.base import Base
-
-dotenv.load_dotenv()
-from src.agent.agent import Agent
-from langgraph.checkpoint.postgres import PostgresSaver
+from src.infrastructure.configs import config
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
-DATABASE_URL = os.environ.get("DATABASE_URL")
-
-engine = create_engine(DATABASE_URL)
+engine = create_engine(config.DATABASE_URL)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -45,9 +35,9 @@ def main():
 
     uvicorn.run(
         "main:app",
-        host="127.0.0.1",
-        port=8000,
-        reload=True,
+        host=config.APP_HOST,
+        port=config.APP_PORT,
+        reload=config.APP_RELOAD,
     )
 
 
